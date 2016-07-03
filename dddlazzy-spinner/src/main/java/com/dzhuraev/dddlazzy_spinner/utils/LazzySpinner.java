@@ -16,10 +16,12 @@ import android.widget.FrameLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.dzhuraev.dddlazzy_spinner.R;
+
 /**
  * Created by root on 7/2/16.
  */
-public class LazzySpinner extends TextView {
+public class LazzySpinner extends BaseSpinner implements View.OnClickListener, AdapterView.OnItemClickListener {
     private Context mContext;
     private ListPopupWindow mPopup;
     private ListAdapter mAdapter;
@@ -139,14 +141,19 @@ public class LazzySpinner extends TextView {
         mPopup.dismiss();
     }
 
-    public void withItemClickListener(AdapterView.OnItemClickListener listener) {
-        this.mClickListener = listener;
-        mPopup.setOnItemClickListener(listener);
+    public void withItemClickListener(@Nullable AdapterView.OnItemClickListener listener) {
+        if(listener == null) {
+            this.mClickListener = listener;
+            mPopup.setOnItemClickListener(listener);
+        } else {
+            this.mClickListener = this;
+            mPopup.setOnItemClickListener(mClickListener);
+        }
     }
 
-    public void withClickListener(View.OnClickListener listener) {
-        this.mOnClickListener = listener;
-        this.setOnClickListener(mOnClickListener);
+    public void withClickListener(@Nullable View.OnClickListener listener) {
+        this.mOnClickListener = this;
+
     }
 
     //
@@ -191,5 +198,15 @@ public class LazzySpinner extends TextView {
     public void withActivity(Activity activity) {
         this.mActivity = activity;
         getWindowDimens();
+    }
+
+    @Override
+    public void onClick(View v) {
+        show();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        dismiss();
     }
 }
