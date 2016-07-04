@@ -26,10 +26,8 @@ public class LazzySpinner extends TextView {
     /**
      * This is LazzySpinner based on a TextView with HintText and HintTextColor
      * LazzySpinner has a view as {@link Spinner} that displays one child at a time and lets the user pick among them.
-     * The items in the Spinner come from the {@link Adapter} associated with
-     * this view.
+     * The items in the Spinner come from the {@link Adapter}
      */
-
     private Context mContext;
     private ListPopupWindow mPopup;
     private ListAdapter mAdapter;
