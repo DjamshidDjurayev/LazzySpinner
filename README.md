@@ -17,7 +17,7 @@ lazzySpinner.withAdapter(new ArrayAdapter<>(this, R.layout.item, string_array));
 lazzySpinner.withClickListener(this);
 lazzySpinner.withItemClickListener(this);
 
-@Override
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
       //do some stuff
       lazzySpinner.dismiss();
