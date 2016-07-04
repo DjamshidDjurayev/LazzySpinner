@@ -11,22 +11,28 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.dzhuraev.dddlazzy_spinner.R;
-
 /**
- * Created by root on 7/2/16.
+ * Created by root on 6/18/16.
  */
-public class LazzySpinner extends BaseSpinner implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class LazzySpinner extends TextView {
+    /**
+     * This is LazzySpinner based on a TextView with HintText and HintTextColor
+     * LazzySpinner has a view as {@link Spinner} that displays one child at a time and lets the user pick among them.
+     * The items in the Spinner come from the {@link Adapter}
+     */
     private Context mContext;
     private ListPopupWindow mPopup;
     private ListAdapter mAdapter;
     private AdapterView.OnItemClickListener mClickListener;
-    private View.OnClickListener mOnClickListener;
+    private OnClickListener mOnClickListener;
     private int windowWidth;
     private int windowHeight;
     private WindowManager windowManager;
@@ -41,30 +47,27 @@ public class LazzySpinner extends BaseSpinner implements View.OnClickListener, A
     public LazzySpinner(Context context) {
         super(context);
         this.mContext = context;
-        mPopup = new ListPopupWindow(mContext);
-        displayMetrics = new DisplayMetrics();
+        setPrefs();
     }
+
 
     public LazzySpinner(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
-        mPopup = new ListPopupWindow(mContext);
-        displayMetrics = new DisplayMetrics();
+        setPrefs();
     }
 
     public LazzySpinner(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.mContext = context;
-        mPopup = new ListPopupWindow(mContext);
-        displayMetrics = new DisplayMetrics();
+        setPrefs();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public LazzySpinner(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         this.mContext = context;
-        mPopup = new ListPopupWindow(mContext);
-        displayMetrics = new DisplayMetrics();
+        setPrefs();
     }
 
     public void setSpinnerHintText(@Nullable CharSequence hint) {
@@ -141,19 +144,14 @@ public class LazzySpinner extends BaseSpinner implements View.OnClickListener, A
         mPopup.dismiss();
     }
 
-    public void withItemClickListener(@Nullable AdapterView.OnItemClickListener listener) {
-        if(listener == null) {
-            this.mClickListener = listener;
-            mPopup.setOnItemClickListener(listener);
-        } else {
-            this.mClickListener = this;
-            mPopup.setOnItemClickListener(mClickListener);
-        }
+    public void withItemClickListener(AdapterView.OnItemClickListener listener) {
+        this.mClickListener = listener;
+        mPopup.setOnItemClickListener(listener);
     }
 
-    public void withClickListener(@Nullable View.OnClickListener listener) {
-        this.mOnClickListener = this;
-
+    public void withClickListener(OnClickListener listener) {
+        this.mOnClickListener = listener;
+        this.setOnClickListener(mOnClickListener);
     }
 
     //
@@ -200,13 +198,8 @@ public class LazzySpinner extends BaseSpinner implements View.OnClickListener, A
         getWindowDimens();
     }
 
-    @Override
-    public void onClick(View v) {
-        show();
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        dismiss();
+    private void setPrefs() {
+        mPopup = new ListPopupWindow(mContext);
+        displayMetrics = new DisplayMetrics();
     }
 }
