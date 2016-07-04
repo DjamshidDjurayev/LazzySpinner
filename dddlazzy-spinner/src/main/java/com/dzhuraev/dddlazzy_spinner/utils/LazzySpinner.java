@@ -72,11 +72,11 @@ public class LazzySpinner extends TextView {
         setPrefs();
     }
 
-    public void setSpinnerHintText(CharSequence hint) {
+    public void setSpinnerHintText(@Nullable CharSequence hint) {
         setHint(hint);
     }
 
-    public void setSpinnerHintColor(int color) {
+    public void setSpinnerHintColor(@Nullable int color) {
         setHintTextColor(color);
     }
 
@@ -123,7 +123,7 @@ public class LazzySpinner extends TextView {
                 }
             }
         }
-        return maxWidth;
+        return maxWidth / 2;
     }
 
     public void show() {
