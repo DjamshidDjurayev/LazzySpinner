@@ -30,14 +30,20 @@ lazzySpinner.withItemClickListener(this);
 ```
 #### Set dialog ***WIDTH*** and ***HEIGHT***
 ``` java
-lazzySpinner.setDialogWidth(LazzySpinner.FULL_SIZE); // for Full size
-lazzySpinner.setDialogHeight(LazzySpinner.HALF_SIZE); // for Half size
+lazzySpinner.setDialogWidth(LazzySpinner.LazzyDimens.FULL_SIZE); // for Full size
+lazzySpinner.setDialogHeight(LazzySpinner.LazzyDimens.HALF_SIZE); // for Half size
 ```
-## How to add it?
+#### Set spinner style
+``` java
+lazzySpinner.setSpinnerStyle(LazzySpinner.LazzyTheme.UNDERLINED);
+lazzySpinner.setSpinnerStyle(LazzySpinner.LazzyTheme.WITH_CORNER);
+lazzySpinner.setSpinnerStyle(LazzySpinner.LazzyTheme.ARROW_DOWN);
+```
+## Usage
 #### Gradle:
 ``` java
 dependencies {
-  compile 'com.github.djurayev:lazzyspinner:0.2.1'
+  compile 'com.github.djurayev:lazzyspinner:0.2.2'
 }
 ```
 #### Maven:
@@ -45,7 +51,7 @@ dependencies {
 <dependency>
   <groupId>com.github.djurayev</groupId>
   <artifactId>lazzyspinner</artifactId>
-  <version>0.2.1</version>
+  <version>0.2.2</version>
   <type>pom</type>
 </dependency>
 ```
