@@ -28,7 +28,7 @@ dependencies {
 publish {
     groupId = 'com.github.djurayev'
     artifactId = 'lazzyspinner'
-    publishVersion = '0.2.1'
+    publishVersion = '0.2.2'
     desc = 'A small library containing a Spinner based on a TextView'
     licences = ['Apache-2.0']
     website = 'https://github.com/DjamshidDjurayev/LazzySpinner'

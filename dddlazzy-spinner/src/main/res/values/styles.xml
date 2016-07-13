@@ -1,0 +1,17 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <!-- UNDERLINED -->
+    <style name="UnderLined" parent="Base.Widget.AppCompat.Spinner.Underlined"/>
+    <!-- WITH ArrowDown -->
+    <style name="ArrowDown" parent="Base.Widget.AppCompat.Spinner"/>
+    <!-- WITH CORNER -->
+    <style name="Corner" parent="Platform.Widget.AppCompat.Spinner"/>
+
+</resources>

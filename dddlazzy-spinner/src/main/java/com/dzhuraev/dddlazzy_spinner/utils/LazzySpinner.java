@@ -13,11 +13,12 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.dzhuraev.dddlazzy_spinner.R;
 
 /**
  * Created by root on 6/18/16.
@@ -38,9 +39,6 @@ public class LazzySpinner extends TextView {
     private WindowManager windowManager;
     private DisplayMetrics displayMetrics;
     private Activity mActivity;
-
-    public static int HALF_SIZE = 1;
-    public static int FULL_SIZE = 2;
     private boolean windowWidthSet = false;
     private boolean windowHeightSet = false;
 
@@ -159,9 +157,9 @@ public class LazzySpinner extends TextView {
         windowWidthSet = true;
         int mWidth;
 
-        if (dialogWidth == HALF_SIZE) {
+        if (dialogWidth == LazzyDimens.HALF_SIZE) {
             mWidth = windowWidth / 2;
-        } else if (dialogWidth == FULL_SIZE) {
+        } else if (dialogWidth == LazzyDimens.FULL_SIZE) {
             mWidth = windowWidth;
         } else {
             mWidth = dialogWidth;
@@ -174,9 +172,9 @@ public class LazzySpinner extends TextView {
         windowHeightSet = true;
         int mHeight;
 
-        if (dialogHeight == HALF_SIZE) {
+        if (dialogHeight == LazzyDimens.HALF_SIZE) {
             mHeight = windowHeight / 2;
-        } else if (dialogHeight == FULL_SIZE) {
+        } else if (dialogHeight == LazzyDimens.FULL_SIZE) {
             mHeight = windowHeight;
         } else {
             mHeight = dialogHeight;
@@ -201,5 +199,42 @@ public class LazzySpinner extends TextView {
     private void setPrefs() {
         mPopup = new ListPopupWindow(mContext);
         displayMetrics = new DisplayMetrics();
+    }
+
+    public void setSpinnerStyle(int style) {
+        switch (style) {
+            case LazzyTheme.UNDERLINED:
+                if (Build.VERSION.SDK_INT < 23) {
+                    this.setTextAppearance(mContext, R.style.UnderLined);
+                } else {
+                    this.setTextAppearance(R.style.UnderLined);
+                }
+                break;
+            case LazzyTheme.ARROW_DOWN:
+                if (Build.VERSION.SDK_INT < 23) {
+                    this.setTextAppearance(mContext, R.style.ArrowDown);
+                } else {
+                    this.setTextAppearance(R.style.ArrowDown);
+                }
+                break;
+            case LazzyTheme.WITH_CORNER:
+                if (Build.VERSION.SDK_INT < 23) {
+                    this.setTextAppearance(mContext, R.style.Corner);
+                } else {
+                    this.setTextAppearance(R.style.Corner);
+                }
+                break;
+        }
+    }
+
+    public static class LazzyTheme {
+        public static final int UNDERLINED = 4;
+        public static final int WITH_CORNER = 5;
+        public static final int ARROW_DOWN = 6;
+    }
+
+    public static class LazzyDimens {
+        public static int HALF_SIZE = 1;
+        public static int FULL_SIZE = 2;
     }
 }
