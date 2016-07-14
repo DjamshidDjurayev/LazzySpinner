@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.ListPopupWindow;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.view.ContextMenu;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -24,118 +26,71 @@ import com.dzhuraev.dddlazzy_spinner.R;
  * Created by root on 6/18/16.
  */
 public class LazzySpinner extends TextView {
+
     /**
      * This is LazzySpinner based on a TextView with HintText and HintTextColor
      * LazzySpinner has a view as {@link Spinner} that displays one child at a time and lets the user pick among them.
      * The items in the Spinner come from the {@link Adapter}
      */
+
     private Context mContext;
-    private ListPopupWindow mPopup;
     private ListAdapter mAdapter;
-    private AdapterView.OnItemClickListener mClickListener;
+    private AdapterView.OnItemClickListener mOnItemClicker;
     private OnClickListener mOnClickListener;
-    private int windowWidth;
-    private int windowHeight;
-    private WindowManager windowManager;
-    private DisplayMetrics displayMetrics;
+    private int mWindowWidth;
+    private int mWindowHeight;
+    private WindowManager mWindowManager;
+    private DisplayMetrics mDisplayMetrics;
+    private LazzyPopup mPopup;
     private Activity mActivity;
     private boolean windowWidthSet = false;
     private boolean windowHeightSet = false;
 
     public LazzySpinner(Context context) {
         super(context);
-        this.mContext = context;
-        setPrefs();
+        mContext = context;
+        initAttrs();
     }
 
-
     public LazzySpinner(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        this.mContext = context;
-        setPrefs();
+        super(new ContextThemeWrapper(context, R.style.Corner), attrs);
+        mContext = context;
+        initAttrs();
     }
 
     public LazzySpinner(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        this.mContext = context;
-        setPrefs();
+        super(new ContextThemeWrapper(context, R.style.Corner), attrs, defStyleAttr);
+        mContext = context;
+        initAttrs();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public LazzySpinner(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        this.mContext = context;
-        setPrefs();
+        mContext = context;
+        initAttrs();
     }
 
-    public void setSpinnerHintText(@Nullable CharSequence hint) {
+    public void setSpinnerHintText(CharSequence hint) {
         setHint(hint);
     }
 
-    public void setSpinnerHintColor(@Nullable int color) {
+    public void setSpinnerHintColor(int color) {
         setHintTextColor(color);
     }
 
     public void withAdapter(ListAdapter listAdapter) {
-        this.mAdapter = listAdapter;
-        this.mPopup.setAdapter(mAdapter);
+        mAdapter = listAdapter;
+        mPopup.setAdapter(mAdapter);
     }
 
-    private int measureContentWidth() {
-
-        ViewGroup mMeasureParent = null;
-        int maxWidth = 0;
-        View itemView = null;
-        int itemType = 0;
-
-        if (mAdapter != null) {
-
-            final ListAdapter adapter = mAdapter;
-            final int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(getMeasuredWidth(), View.MeasureSpec.UNSPECIFIED);
-            final int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), View.MeasureSpec.UNSPECIFIED);
-            final int count = adapter.getCount();
-
-            for (int i = 0; i < count; i++) {
-                final int positionType = adapter.getItemViewType(i);
-                if (positionType != itemType) {
-                    itemType = positionType;
-                    itemView = null;
-                }
-
-                if (mMeasureParent == null) {
-                    mMeasureParent = new FrameLayout(mContext);
-                    mMeasureParent.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-                }
-
-                itemView = adapter.getView(i, itemView, mMeasureParent);
-                itemView.measure(widthMeasureSpec, heightMeasureSpec);
-
-                final int itemWidth = itemView.getMeasuredWidth();
-
-                if (itemWidth > maxWidth) {
-                    maxWidth = itemWidth;
-                }
-            }
-        }
-        return maxWidth / 2;
+    public void withActivity(Activity activity) {
+        this.mActivity = activity;
+        getWindowDimens();
     }
 
     public void show() {
-        getSettings();
-        mPopup.show();
-    }
-
-    private void getSettings() {
-        mPopup.setModal(true);
-        mPopup.setAnchorView(this);
-        mPopup.setInputMethodMode(ListPopupWindow.INPUT_METHOD_NOT_NEEDED);
-
-        if (!windowWidthSet) { // by default full size
-            mPopup.setContentWidth(windowWidth);
-            mPopup.setWidth(windowWidth);
-        }
+        this.mPopup.show();
     }
 
     public void dismiss() {
@@ -143,24 +98,21 @@ public class LazzySpinner extends TextView {
     }
 
     public void withItemClickListener(AdapterView.OnItemClickListener listener) {
-        this.mClickListener = listener;
-        mPopup.setOnItemClickListener(listener);
+        this.mOnItemClicker = listener;
     }
 
     public void withClickListener(OnClickListener listener) {
         this.mOnClickListener = listener;
-        this.setOnClickListener(mOnClickListener);
     }
 
-    //
     public void setDialogWidth(int dialogWidth) {
         windowWidthSet = true;
         int mWidth;
 
         if (dialogWidth == LazzyDimens.HALF_SIZE) {
-            mWidth = windowWidth / 2;
+            mWidth = mWindowWidth / 2;
         } else if (dialogWidth == LazzyDimens.FULL_SIZE) {
-            mWidth = windowWidth;
+            mWidth = mWindowWidth;
         } else {
             mWidth = dialogWidth;
         }
@@ -173,9 +125,9 @@ public class LazzySpinner extends TextView {
         int mHeight;
 
         if (dialogHeight == LazzyDimens.HALF_SIZE) {
-            mHeight = windowHeight / 2;
+            mHeight = mWindowHeight / 2;
         } else if (dialogHeight == LazzyDimens.FULL_SIZE) {
-            mHeight = windowHeight;
+            mHeight = mWindowHeight;
         } else {
             mHeight = dialogHeight;
         }
@@ -184,57 +136,99 @@ public class LazzySpinner extends TextView {
 
     private void getWindowDimens() {
         if (mActivity != null) {
-            this.windowManager = mActivity.getWindowManager();
-            windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-        }
-        this.windowHeight = displayMetrics.heightPixels;
-        this.windowWidth = displayMetrics.widthPixels;
-    }
-
-    public void withActivity(Activity activity) {
-        this.mActivity = activity;
-        getWindowDimens();
-    }
-
-    private void setPrefs() {
-        mPopup = new ListPopupWindow(mContext);
-        displayMetrics = new DisplayMetrics();
-    }
-
-    public void setSpinnerStyle(int style) {
-        switch (style) {
-            case LazzyTheme.UNDERLINED:
-                if (Build.VERSION.SDK_INT < 23) {
-                    this.setTextAppearance(mContext, R.style.UnderLined);
-                } else {
-                    this.setTextAppearance(R.style.UnderLined);
-                }
-                break;
-            case LazzyTheme.ARROW_DOWN:
-                if (Build.VERSION.SDK_INT < 23) {
-                    this.setTextAppearance(mContext, R.style.ArrowDown);
-                } else {
-                    this.setTextAppearance(R.style.ArrowDown);
-                }
-                break;
-            case LazzyTheme.WITH_CORNER:
-                if (Build.VERSION.SDK_INT < 23) {
-                    this.setTextAppearance(mContext, R.style.Corner);
-                } else {
-                    this.setTextAppearance(R.style.Corner);
-                }
-                break;
+            mWindowManager = mActivity.getWindowManager();
+            mWindowManager.getDefaultDisplay().getMetrics(mDisplayMetrics);
+            mWindowHeight = mDisplayMetrics.heightPixels;
+            mWindowWidth = mDisplayMetrics.widthPixels;
         }
     }
 
-    public static class LazzyTheme {
-        public static final int UNDERLINED = 4;
-        public static final int WITH_CORNER = 5;
-        public static final int ARROW_DOWN = 6;
+    private class LazzyPopup extends android.widget.ListPopupWindow {
+        public LazzyPopup(
+                Context context) {
+            super(context);
+            setAnchorView(LazzySpinner.this);
+            setModal(true);
+            setInputMethodMode(android.widget.ListPopupWindow.INPUT_METHOD_NOT_NEEDED);
+            setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    setSelection(position);
+                    LazzySpinner.this.setText(getListView().getAdapter().getItem(position).toString());
+                    if (mOnItemClicker != null) {
+                        mOnItemClicker.onItemClick(parent, view, position, id);
+                    }
+                    dismiss();
+                }
+            });
+        }
+
+        private int measureContentWidth() {
+            ViewGroup mMeasureParent = null;
+            int maxWidth = 0;
+            View itemView = null;
+            int itemType = 0;
+
+            if (mAdapter != null) {
+
+                final ListAdapter adapter = mAdapter;
+                final int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(getMeasuredWidth(), View.MeasureSpec.UNSPECIFIED);
+                final int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), View.MeasureSpec.UNSPECIFIED);
+                final int count = adapter.getCount();
+
+                for (int i = 0; i < count; i++) {
+                    final int positionType = adapter.getItemViewType(i);
+                    if (positionType != itemType) {
+                        itemType = positionType;
+                        itemView = null;
+                    }
+
+                    if (mMeasureParent == null) {
+                        mMeasureParent = new FrameLayout(mContext);
+                        mMeasureParent.setLayoutParams(new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                    }
+
+                    itemView = adapter.getView(i, itemView, mMeasureParent);
+                    itemView.measure(widthMeasureSpec, heightMeasureSpec);
+
+                    final int itemWidth = itemView.getMeasuredWidth();
+
+                    if (itemWidth > maxWidth) {
+                        maxWidth = itemWidth;
+                    }
+                }
+            }
+            return maxWidth / 2;
+        }
     }
 
-    public static class LazzyDimens {
-        public static int HALF_SIZE = 1;
-        public static int FULL_SIZE = 2;
+    private interface BaseLazzyPopup {
+        void setAdapter(ListAdapter adapter);
+
+        void show();
+
+        void dismiss();
+
+        void setContentWidth(int width);
+
+        void setHeight(int height);
     }
+
+    private void initAttrs() {
+        mPopup = new LazzyPopup(mContext);
+        this.setOnClickListener(clicker);
+        mDisplayMetrics = new DisplayMetrics();
+    }
+
+    OnClickListener clicker = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (mOnClickListener != null) {
+                mOnClickListener.onClick(v);
+            }
+            show();
+        }
+    };
 }

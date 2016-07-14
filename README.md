@@ -1,6 +1,6 @@
 # LazzySpinner
 Spinner based on a TextView with HintText and HintTextColor
-## How to use it?
+## Usage
 Firstly, add the following code to your xml file
 ``` xml
 <com.dzhuraev.dddlazzy_spinner.utils.LazzySpinner
@@ -12,34 +12,15 @@ Firstly, add the following code to your xml file
 Then find it by id and do the following
 ``` java
 lazzySpinner = (LazySpinner) findViewById(R.id.spinner);
-lazzySpinner.withActivity(this);
 lazzySpinner.withAdapter(new ArrayAdapter<>(this, R.layout.item, string_array));
-lazzySpinner.withClickListener(this);
-lazzySpinner.withItemClickListener(this);
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-      //do some stuff
-      lazzySpinner.dismiss();
-    }
-
-    @Override
-    public void onClick(View v) {
-        lazzySpinner.show();
-    }
+lazzySpinner.withActivity(this);
 ```
 #### Set dialog ***WIDTH*** and ***HEIGHT***
 ``` java
 lazzySpinner.setDialogWidth(LazzySpinner.LazzyDimens.FULL_SIZE); // for Full size
 lazzySpinner.setDialogHeight(LazzySpinner.LazzyDimens.HALF_SIZE); // for Half size
 ```
-#### Set spinner style
-``` java
-lazzySpinner.setSpinnerStyle(LazzySpinner.LazzyTheme.UNDERLINED);
-lazzySpinner.setSpinnerStyle(LazzySpinner.LazzyTheme.WITH_CORNER);
-lazzySpinner.setSpinnerStyle(LazzySpinner.LazzyTheme.ARROW_DOWN);
-```
-## Usage
+## How to add it ?
 #### Gradle:
 ``` java
 dependencies {
