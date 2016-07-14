@@ -17,8 +17,8 @@ lazzySpinner.withActivity(this);
 ```
 #### Set dialog ***WIDTH*** and ***HEIGHT***
 ``` java
-lazzySpinner.setDialogWidth(LazzySpinner.LazzyDimens.FULL_SIZE); // for Full size
-lazzySpinner.setDialogHeight(LazzySpinner.LazzyDimens.HALF_SIZE); // for Half size
+lazzySpinner.setDialogWidth(LazzyDimens.FULL_SIZE); // for Full size
+lazzySpinner.setDialogHeight(LazzyDimens.HALF_SIZE); // for Half size
 ```
 ## How to add it ?
 #### Gradle:
