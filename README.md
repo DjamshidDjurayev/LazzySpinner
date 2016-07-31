@@ -24,7 +24,7 @@ lazzySpinner.setDialogHeight(LazzyDimens.HALF_SIZE); // for Half size
 #### Gradle:
 ``` java
 dependencies {
-  compile 'com.github.djurayev:lazzyspinner:0.2.3'
+  compile 'com.github.djurayev:lazzyspinner:0.2.4'
 }
 ```
 #### Maven:
@@ -32,7 +32,7 @@ dependencies {
 <dependency>
   <groupId>com.github.djurayev</groupId>
   <artifactId>lazzyspinner</artifactId>
-  <version>0.2.3</version>
+  <version>0.2.4</version>
   <type>pom</type>
 </dependency>
 ```

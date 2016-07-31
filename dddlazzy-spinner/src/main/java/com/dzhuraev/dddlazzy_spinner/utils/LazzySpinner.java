@@ -53,13 +53,13 @@ public class LazzySpinner extends TextView {
     }
 
     public LazzySpinner(Context context, AttributeSet attrs) {
-        super(new ContextThemeWrapper(context, R.style.Corner), attrs);
+        super(context, attrs);
         mContext = context;
         initAttrs();
     }
 
     public LazzySpinner(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(new ContextThemeWrapper(context, R.style.Corner), attrs, defStyleAttr);
+        super(context, attrs, defStyleAttr);
         mContext = context;
         initAttrs();
     }
