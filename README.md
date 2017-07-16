@@ -16,7 +16,7 @@ lazzySpinner.withAdapter(new ArrayAdapter<>(this, R.layout.item, string_array));
 lazzySpinner.withActivity(this);
 ```
 #### Set dialog ***WIDTH*** and ***HEIGHT***
-``` java
+``` javaScript
 lazzySpinner.setDialogWidth(LazzyDimens.FULL_SIZE); // for Full size
 lazzySpinner.setDialogHeight(LazzyDimens.HALF_SIZE); // for Half size
 ```
